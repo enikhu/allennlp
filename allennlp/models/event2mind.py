@@ -181,6 +181,11 @@ class Event2Mind(Model):
                 )
                 total_loss += loss
                 output_dict[f"{name}_loss"] = loss
+                print(name)
+                print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+                print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+                print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+                print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
 
             # Use mean loss (instead of the sum of the losses) to be comparable to the paper.
             output_dict["loss"] = total_loss / len(self._states)
@@ -203,7 +208,7 @@ class Event2Mind(Model):
                 output_dict[f"{name}_top_k_log_probabilities"] = log_probabilities
 
         return output_dict
-
+##
     def greedy_search(self,
                       final_encoder_output: torch.LongTensor,
                       target_tokens: Dict[str, torch.LongTensor],

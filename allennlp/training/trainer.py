@@ -486,12 +486,21 @@ class Trainer(Registrable):
             batches_this_epoch += 1
             self._batch_num_total += 1
             batch_num_total = self._batch_num_total
-
+            print("nik... batch", batch)
             self._log_histograms_this_batch = self._histogram_interval is not None and (
                     batch_num_total % self._histogram_interval == 0)
 
             self.optimizer.zero_grad()
+            print('-------------------------------------------------------------------------------')
+            print('-------------------------------------------------------------------------------')
+            print('-------------------------------------------------------------------------------')
+            print('-------------------------------------------------------------------------------')
+            print('-------------------------------------------------------------------------------')
+            print('-------------------------------------------------------------------------------')
+            print('-------------------------------------------------------------------------------')
+            print('-------------------------------------------------------------------------------')
 
+            print(batch)
             loss = self.batch_loss(batch, for_training=True)
             if torch.isnan(loss):
                 raise ValueError("nan loss encountered")
