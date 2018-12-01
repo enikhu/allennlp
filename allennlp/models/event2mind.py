@@ -171,21 +171,23 @@ class Event2Mind(Model):
                 raise Exception("Mismatch between target_tokens and self._states. Keys in " +
                                 f"targets only: {target_only} Keys in states only: {states_only}")
             total_loss = 0
+            # iterates through each of the target_names: Xintent, Xreact, Oreact
             for name, state in self._states.items():
-                loss = self.greedy_search(
-                        final_encoder_output=final_encoder_output,
-                        target_tokens=target_tokens[name],
-                        target_embedder=state.embedder,
-                        decoder_cell=state.decoder_cell,
-                        output_projection_layer=state.output_projection_layer
-                )
-                total_loss += loss
+                min_loss_target_embedder = 999999
+                # gets minimum training loss for each of the embeddings present in Xreact
+                # (.. similarly for Xintent, Oreact)
+                for unit_target_embedder in state.embedder:
+                    loss = self.greedy_search(
+                            final_encoder_output=final_encoder_output,
+                            target_tokens=target_tokens[name],
+                            target_embedder=state.embedder,
+                            decoder_cell=state.decoder_cell,
+                            output_projection_layer=state.output_projection_layer
+                    )
+                    if loss < min_loss_target_embedder:
+                        min_loss_target_embedder = loss
+                total_loss += min_loss_target_embedder
                 output_dict[f"{name}_loss"] = loss
-                print(name)
-                print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-                print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-                print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-                print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
 
             # Use mean loss (instead of the sum of the losses) to be comparable to the paper.
             output_dict["loss"] = total_loss / len(self._states)
